@@ -23,11 +23,143 @@ echo "It's \"Sunday\".\t Hello $name" . PHP_EOL;
 改行を活かす方法
 $name = 'taguchi';
 
-$text = <<<EOT
+$text = <<<'EOT'
 wow! $name
   fantastic!
 yeah!
 EOT;
 
 echo $text;
+
+
+・変数を使った演算
+
+$price = 500;
+
+<!-- 同じこと -->
+// $price = $price + 100;
+$price += 100; // 600
+$price *= 100; // 60000
+<!-- 1だけ足し引き -->
+$price++; // 60001
+$price--; // 60000
+
+
+・定数
+define('NAME', 'hoge');
+
+const NAME = 'hoge';
+
+
+・データ型
+データ型を調べる
+var_dump($〇〇)
+
+型を変換
+$a = (float)5;
+$d = (string)3.2;
+
+
+・条件分岐
+
+こんな感じ
+if ($score >= 80) {
+  echo 'Great' . PHP_EOL;
+} elseif ($score >= 60) {
+  echo 'Good' . PHP_EOL;
+} else {
+  echo 'OK' . PHP_EOL;
+}
+
+
+・比較演算子
+
+同じ、同じじゃない
+===, !==
+
+$x = 4 → true
+$x = 0 → false
+
+※falseになる条件
+false, 0, null, ""（空文字）, []（空配列）
+
+
+・論理演算子
+&&　なおかつ
+||　もしくは
+
+<?php
+$name = 'ega';
+$score = 50;
+
+// if ($score >= 40) {
+//   if ($name === 'ega') {
+//     echo 'good' . PHP_EOL;
+//   }
+// }
+
+if ($score >= 40 && $name === 'ega') {
+  echo 'good' . PHP_EOL;
+}
+?>
+
+
+・switch
+
+===が続くような処理
+<?php
+
+$signal = 'blue';
+
+// if ($signal === 'red') {
+//   echo 'Stop!' . PHP_EOL;
+// } elseif ($signal === 'yellow') {
+//   echo 'Caution!' . PHP_EOL;
+// } elseif ($signal === 'blue'){
+//   echo 'Go!' . PHP_EOL;
+// }
+
+// 上と同じ処理
+switch ($signal) {
+  case 'red':
+    echo 'Stop!' . PHP_EOL;
+    break;
+  case 'ywllow':
+    echo 'Caution!' . PHP_EOL;
+    break;
+  case 'blue':
+    echo 'Go!' . PHP_EOL;
+    break;
+}
+?>
+
+・switch2
+
+<?php
+
+// $signal = 'red';
+$signal = 'hoge';
+
+switch ($signal) {
+  case 'red':
+    echo 'Stop!' . PHP_EOL;
+    break;
+  case 'yellow':
+    echo 'Caution!' . PHP_EOL;
+    break;
+  case 'blue':
+  case 'green':
+    echo 'Go!' . PHP_EOL;
+    break;
+  // どれにも当てはまらない場合
+  default:
+    echo 'wrong signal!' . PHP_EOL;
+    break;
+}
+?>
+
+※break;　を忘れると次の処理まで実行されてしまう
+
+
+・for文
 
