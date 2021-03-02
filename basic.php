@@ -337,3 +337,117 @@ echo getAward(150) . PHP_EOL;
 echo getAward(40) . PHP_EOL;
 ?>
 
+
+・配列
+<?php
+$scores = [30, 60, 90];
+
+$scores[1] = 40; //2番目を、40に書き換え
+echo $scores[1] . PHP_EOL; //配列の2番目を表示
+?>
+
+
+・配列のキー指定
+<?php
+$scores = [
+  'first' => 90,
+  'second' => 40,
+  'third' => 100,
+];
+echo $scores['first']; //呼び出すキーを変えれる
+
+var_dump($scores);　→　型、値、キー、要素数
+print_r($scores);　→　値、キー
+?>
+
+
+・foreach
+foreach ($arr as $value)
+foreach ($arr as $key => $value)　→　キーを表示させる場合
+
+<?php
+
+$scores = [
+  'first'  => 90, 
+  'second' => 40, 
+  'third'  => 100,
+];
+
+foreach ($scores as $key => $score) {
+  echo $key . ' - ' . $score . PHP_EOL;
+}
+?>
+
+
+・配列の要素を展開
+<?php
+$more_score = [55, 75, [1, 2]]; //配列の中に配列入れれる
+
+$scores = [
+  90,
+  40,
+  ...$more_score, //「...」を入れないと、入れ子扱いになる
+  100,
+];
+
+echo $scores[4][1] . PHP_EOL; //入れ子のキーを取り出す
+?>
+
+上の中身
+print_r($scores);
+Array
+(
+    [0] => 90
+    [1] => 40
+    [2] => 55
+    [3] => 75
+    [4] => Array
+        (
+            [0] => 1
+            [1] => 2
+        )
+
+    [5] => 100
+)
+
+
+・可変長引数
+好きな数だけ、引数を渡せる
+
+<?php
+function sum(...$numbers) //「...引数」で設定
+{
+  $total = 0;
+  foreach ($numbers as $number) {
+    $total += $number;
+  }
+  return $total;
+}
+
+echo sum(10, 20, 30) . PHP_EOL;
+echo sum(10, 20, 30, 50, 60) . PHP_EOL;
+?>
+
+
+・返り値を、配列で返す
+
+<?php
+
+function get_stats(...$numbers)
+{
+  $total = 0;
+  foreach ($numbers as $number) {
+    $total += $number;
+  }
+  return [$total, $total / count($numbers)];
+}
+
+// print_r(get_stats(1, 3, 5));　→　[9,3]で帰ってくる
+
+[$sum, $ave] = get_stats(1, 3, 5); //返り値の配列をそのまま、変数に代入
+
+echo $sum . PHP_EOL;
+echo $ave . PHP_EOL;
+?>
+
+
