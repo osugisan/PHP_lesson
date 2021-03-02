@@ -162,4 +162,36 @@ switch ($signal) {
 
 
 ・for文
+for (式１; 式２; 式３) {
+  処理文
+}
+
+処理を５回繰り返し
+<?php
+for ($i = 1; $i <= 5; $i++) {
+  echo "$i - Hello" . PHP_EOL;
+}
+?>
+
+・while文
+
+<?php
+$hp = 100;
+
+while ($hp >0) {
+  echo "your HP: $hp" . PHP_EOL;
+  $hp -= 15;　//ここを書き忘れるとループする
+}
+?>
+
+条件を満たさなくても一回は実行する場合
+<?php
+$hp = -50;
+
+do {
+  echo "your HP: $hp" . PHP_EOL;
+  $hp -= 15;
+} while ($hp > 0); //;つける
+?>
+
 
