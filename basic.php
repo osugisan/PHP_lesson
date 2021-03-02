@@ -195,3 +195,145 @@ do {
 ?>
 
 
+・continue, break
+処理をスキップ　→　continue
+処理を中断　→　break
+
+<?php
+for ($i = 1; $i <= 10; $i++) {
+  if ($i % 3) { //３の倍数
+    continue;
+  }
+  echo $i . PHP_EOL;
+}
+?>
+
+<?php
+for ($i = 1; $i <= 10; $i++) {
+  if ($i === 3) {
+    break;
+  }
+  echo $i . PHP_EOL;
+}
+?>
+
+
+・関数
+function 関数名() {
+  処理式
+}
+
+<?php
+function showAd() {
+  echo '----------' . PHP_EOL;
+  echo '----Ad----' . PHP_EOL;
+  echo '----------' . PHP_EOL;
+}
+
+showAd();
+?>
+
+
+・引数
+function 関数名($a) {
+  --- ' . $a . ' ---
+}
+
+<?php
+function showAd($message = 'Ad') //引数がない場合、デフォルト値適用
+{
+  echo '----------' . PHP_EOL;
+  echo '--- ' . $message . ' ---' . PHP_EOL;
+  echo '----------' . PHP_EOL;
+}
+
+showAd('Header Ad');
+echo 'Tom is great!' . PHP_EOL;
+echo 'Bob is great!' . PHP_EOL;
+showAd();
+echo 'Steve is great!' . PHP_EOL;
+echo 'Bob is great!' . PHP_EOL;
+showAd('Footer AD');
+?>
+
+
+・return
+return　→　関数から値を返す
+
+<?php
+function sum($a, $b, $c) {
+  return $a + $b + $c;
+}
+
+echo sum(100, 200, 300) + sum(400, 500,600) . PHP_EOL;
+?>
+
+
+・変数のスコープ
+関数外で指定された変数は、関数の中で使えない
+<?php
+$rate = 1.1; //グローバルスコープ
+
+function sum($a, $b, $c){
+  $rate = 1.08; //ローカルスコープ
+  return ($a + $b + $c) * $rate;
+}
+
+echo sum(100, 200, 300) + sum(300, 400, 500) . PHP_EOL;
+?>
+
+
+・無名関数
+関数を、変数に代入できる
+<?php
+$sum = function ($a, $b, $c) {
+  return $a + $b + $c;
+}; //;必要
+
+echo $sum(100, 200, 300) . PHP_EOL;
+?>
+
+
+・条件演算子
+
+<?php
+if ($total < 0) {
+    return 0;
+  } else {
+    return $total;
+  }
+
+//上と同じ
+return $total < 0 ? 0 : $total;
+?>
+
+
+・引数の型付
+予期しない型での受け取りを防止
+
+<?php
+declare(strict_types=1); //'4'の場合でも、弾く
+
+function showInfo(string $name, int $score): void //引数の前に型を指定　返り値がない場合、最後に: void
+{
+  echo $name . ': ' . $score . PHP_EOL;
+}
+
+showInfo('hoge', '4');
+?>
+
+
+・nullを渡す
+型の前に、? をつける
+<?php
+declare(strict_types=1);
+
+function getAward(int $score): ?string
+{
+  return $score >= 100 ? 'Gold medal' : null;
+}
+
+echo getAward(150) . PHP_EOL;
+echo getAward(40) . PHP_EOL;
+?>
+
