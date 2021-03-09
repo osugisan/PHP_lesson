@@ -162,3 +162,18 @@ print_r($scores);
 print_r($partial);
 ?>
 
+
+・配列の要素削除
+
+<?php
+$scores = [30, 40, 50, 60, 70, 80];
+// ①対象配列　②2番目　③個数　→　②③を削除
+array_splice($scores, 2, 3);
+// ④削除した位置に、100を挿入
+array_splice($scores, 2, 3, 100);
+// ③0にすることで、削除しない　④複数挿入は、配列型にする
+array_splice($scores, 2, 0, [100,200]);
+
+print_r($scores);
+?>
+
