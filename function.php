@@ -177,3 +177,119 @@ array_splice($scores, 2, 0, [100,200]);
 print_r($scores);
 ?>
 
+・配列をソート、シャッフルする
+
+<?php
+$scores = [40, 50, 20, 30];
+// 小さい順に並べ替え
+sort($scores);
+print_r($scores);
+// 大きい順に並べ替え
+rsort($scores);
+print_r($scores);
+// ランダムに並び替え
+shuffle($scores);
+print_r($scores);
+// ②の数だけ要素取り出し（戻り値は、要素ではなく「キー」）
+$picked = array_rand($scores, 2);
+echo $scores[$picked[0]] . PHP_EOL;
+echo $scores[$picked[1]] . PHP_EOL;
+?>
+
+
+・配列の要素の集計
+
+<?php
+// ①の数から　②の数まで配列生成　③の数で埋める
+$scores = array_fill(0, 5, 10);
+// 1から10まで、順番に配列生成
+$scores = range(1, 10);
+// ③要素を、２置きに表示
+$scores = range(1, 10, 2);
+
+print_r($scores);
+
+// 配列の合計
+echo array_sum($scores) . PHP_EOL;
+// 配列の平均
+echo array_sum($scores) / count($scores) . PHP_EOL;
+// max, minも使える
+echo max($scores) . PHP_EOL;
+echo min($scores) . PHP_EOL;
+?>
+
+
+・配列の連結、差、共通項の計算
+
+<?php
+
+$a = [3, 4, 8];
+$b = [4, 8, 12];
+
+// ①と②の配列結合
+$merged = array_marged($a, $b);
+$merged = [...$a, ...$b];
+print_r($merged);
+// 配列から共通項を除外して表示
+$uniques = array_unique($merged);
+print_r($uniques);
+
+// ②と同じ要素を除外して、①を表示
+$diff1 = array_diff($a, $b);
+print_r($diff1); //[3]
+
+$diff1 = array_diff($b, $a);
+print_r($diff1); //[12]
+
+// ①と②の共通項を表示
+$common = array_intersect($a, $b);
+print_r($common); //[4, 8]
+?>
+
+・array_map()
+array_map(関数, 対象配列);
+それぞれの要素に、同じ処理を加える
+
+<?php
+$prices = [100, 200, 300];
+
+$newPrices = array_map(
+  function ($n) { return $n * 1.1; },
+  // これでも同じ
+  // fn ($n) => $n * 1.1,
+  $prices
+  );
+
+print_r($newPrices);
+?>
+
+
+・array_filter()
+array_filter(対象配列, 関数);
+「true」の要素のみ、配列を返す
+
+<?php
+$numbers = range(1, 10);
+
+$evenNumbers = array_filter(
+  $numbers,
+  // function ($n) {
+  // パターン①
+  //   if ($n % 2 ===0) { //偶数指定
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }
+  //　パターン②
+  //   return $n % 2 === 0;
+  // }
+  // パターン③
+  fn($n) => $n % 2 === 0
+);
+
+print_r($evenNumbers);
+?>
+
+
+・
