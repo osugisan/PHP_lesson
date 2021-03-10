@@ -292,4 +292,104 @@ print_r($evenNumbers);
 ?>
 
 
+・配列のキー、値の操作
+
+<?php
+$scores = [
+  'taguchi' => 80,
+  'hayashi' => 70,
+  'kikuchi' => 60,
+];
+// キーを配列化
+$keys = array_keys($scores);
+print_r($keys);
+// 値を新たに配列化
+$values = array_values($scores);
+print_r($values);
+
+// キーに①の要素が含まれているか
+if (array_key_exists('taguchi', $scores)) {
+  echo 'true' . PHP_EOL;
+}
+// 値に①の要素が含まれているか
+if (in_array(80, $scores)) {
+  echo 'true' . PHP_EOL;
+}
+
+// ①の値に、セットされているキーを表示
+echo array_search(70, $scores) . PHP_EOL;
+?>
+
+
+・ソート亜種
+
+<?php
+$scores = [
+  'taguchi' => 80,
+  'hayashi' => 70,
+  'kikuchi' => 60,
+];
+// キーを保持したままソート
+asort($scores);
+print_r($scores);
+arsort($scores);
+print_r($scores);
+
+// キーを対象にソート
+ksort($scores);
+print_r($scores);
+krsort($scores);
+print_r($scores);
+?>
+
+
+・usort()
+
+<?php
+$data = [
+  ['name' => 'taguchi', 'score' => 80],
+  ['name' => 'kikuchi', 'score' => 60],
+  ['name' => 'hayashi', 'score' => 70],
+  ['name' => 'tamachi', 'score' => 60],
+];
+
+// scoreの小さい順にソートする処理
+usort(
+  $data,
+  function ($a, $b) {
+    if ($a['score'] === $b['score']) {
+      return 0;
+    }
+    return $a['score'] > $b['score'] ? 1 : -1;
+  }
+);
+
+print_r($data);
+?>
+
+・array_multisort()
+
+<?php
+
+$data = [
+  ['name' => 'taguchi', 'score' => 80],
+  ['name' => 'kikuchi', 'score' => 60],
+  ['name' => 'hayashi', 'score' => 70],
+  ['name' => 'tamachi', 'score' => 60],
+];
+
+// 二重配列を、配列に戻す
+$scores = array_column($data, 'score');
+$names = array_column($data, 'name');
+
+// 上から順に、並べ替え
+array_multisort(
+  $scores, // SORT_DESC, SORT_NUMERIC,(逆順, 数値宣言)
+  $names,
+  $data
+);
+
+print_r($data);
+?>
+
 ・
