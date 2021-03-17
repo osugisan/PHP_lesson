@@ -476,3 +476,25 @@ foreach (glob('data/*.txt') as $item) {
 }
 ?>
 
+
+・ファイルの確認
+<?php
+// falseだったらのif文
+if (!file_exists('data/saburo.txt')) {
+  echo 'nothing!' . PHP_EOL;
+  exit;
+}
+// ファイルが有るかの確認
+if (file_exists('data') === true) {
+  echo 'OK' . PHP_EOL;
+}
+// 書き込めるかの確認
+if (is_writeable('data/taro.txt') === true) {
+  echo 'OK' . PHP_EOL;
+}
+// 読み込めるかの確認
+if (is_readable('data/taro.txt') === true) {
+  echo 'OK' . PHP_EOL;
+}
+?>
+
