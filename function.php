@@ -392,4 +392,13 @@ array_multisort(
 print_r($data);
 ?>
 
-・
+・ファイルに文字列を入力する
+<?php
+// names.txt がなければ新規作成('w')
+// $fp　に代入される
+$fp = fopen('names.txt', 'w');
+// ファイル内に、書き込み（\n は改行）
+fwrite($fp, "taro\n");
+// 処理終了
+fclose($fp);
+
