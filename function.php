@@ -392,6 +392,7 @@ array_multisort(
 print_r($data);
 ?>
 
+
 ・ファイルに文字列を入力する
 <?php
 // names.txt がなければ新規作成('w')
@@ -401,4 +402,77 @@ $fp = fopen('names.txt', 'w');
 fwrite($fp, "taro\n");
 // 処理終了
 fclose($fp);
+?>
+
+・ファイルに文字列追記
+<?php
+// 'a' → 追記
+$fp = fopen('names.txt', 'a');
+
+fwrite($fp, "taro\n");
+fwrite($fp, "jiro\n");
+
+fclose($fp);
+?>
+
+
+・ファイルからデータ読み込み
+<?php
+$fp = fopen('names.txt', 'r');
+// ファイルの中身を一括読み込み
+$contents = fread($fp, filesize('names.txt'));
+fclose($fp);
+echo $contents;
+
+
+$fp = fopen('names.txt', 'r');
+// ファイルの中身を、一行ずつ読み込み
+// 読み込む行がなくなると、falseを返す
+while (($line = fgets($fp)) !== false) {
+  echo $line;
+}
+fclose($fp);
+?>
+
+
+・上記以外のファイル処理方法
+<?php
+// ファイル書き込み
+$contents = "taro\njiro\nsaburo\n";
+file_put_contents('names.txt', $contents);
+// ファイルの内容を、変数で表示
+$contents = file_get_contents('names.txt');
+echo $contents;
+// ファイルの内容を配列に入れる
+$lines = file('names.txt');
+var_dump($lines);
+?>
+
+
+・ディレクトリ操作
+<?php
+// dataディレクトリ内に作成
+file_put_contents('data/taro.txt', "taro\n");
+file_put_contents('data/jiro.txt', "jiro\n");
+
+// dataを $dp に格納
+$dp = opendir('data');
+// falseになるまでループ
+// '.', '..'はスルーする
+while (($item = readdir($dp)) !== false) {
+  if ($item === '.' || $item === '..') {
+    continue;
+  }
+  echo $item . PHP_EOL;
+}
+
+
+別の方法
+// data配下の *.txtを配列化
+foreach (glob('data/*.txt') as $item) {
+  echo $item . PHP_EOL;
+  // ファイル名だけ表示
+  echo basename($item) . PHP_EOL;
+}
+?>
 
