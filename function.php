@@ -498,3 +498,15 @@ if (is_readable('data/taro.txt') === true) {
 }
 ?>
 
+
+・日時を扱う関数
+
+<?php
+echo date('Y-m-d l') . PHP_EOL;// 現在日時
+
+echo date('Y-m-d l', mktime(0, 0, 0, 5, 1, 2021)) . PHP_EOL;// 2021-05-01 Saturday
+
+echo date('Y-m-d l', strtotime('2021-05-01')) . PHP_EOL;// 2021-05-01 Saturday
+echo date('Y-m-d l', strtotime('2021-05-01 + 1 day')) . PHP_EOL;// 2021-05-02 Sunday
+?>
+
