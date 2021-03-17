@@ -449,4 +449,30 @@ var_dump($lines);
 ?>
 
 
-・
+・ディレクトリ操作
+<?php
+// dataディレクトリ内に作成
+file_put_contents('data/taro.txt', "taro\n");
+file_put_contents('data/jiro.txt', "jiro\n");
+
+// dataを $dp に格納
+$dp = opendir('data');
+// falseになるまでループ
+// '.', '..'はスルーする
+while (($item = readdir($dp)) !== false) {
+  if ($item === '.' || $item === '..') {
+    continue;
+  }
+  echo $item . PHP_EOL;
+}
+
+
+別の方法
+// data配下の *.txtを配列化
+foreach (glob('data/*.txt') as $item) {
+  echo $item . PHP_EOL;
+  // ファイル名だけ表示
+  echo basename($item) . PHP_EOL;
+}
+?>
+
