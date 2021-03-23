@@ -113,3 +113,74 @@ $posts[0]->likes = -100;
 $posts[0]->show();
 $posts[1]->show();
 ?>
+
+
+・メッソドを介して、プロパティを操作
+
+カプセル化
+<?php
+
+class Post
+{
+  public $text;
+  private $likes = 0;
+
+  public function __construct($text)
+  {
+    $this->text = $text;
+  }
+
+  public function show()
+  {
+    printf('%s (%d)' . PHP_EOL, $this->text, $this->likes);
+  }
+  // privateのプロパティをメソッドで操作
+  public function like()
+  {
+    $this->likes++;
+    
+    if ($this->likes > 100) {
+      $this->likes = 100;
+    }
+  }
+}
+
+$posts = [];
+$posts[0] = new Post('hello');
+$posts[1] = new Post('hello again');
+
+$posts[0]->like();
+$posts[0]->show();
+$posts[1]->show();
+
+
+・プロパティで型宣言
+
+<?php
+// これがないとstringに変換してしまう
+declare(strict_types=1);
+
+class Post
+{
+  // 変数の前に、型宣言
+  private string $text;
+
+  public function __construct(string $text)
+  {
+    $this->text = $text;
+  }
+
+  public function show()
+  {
+    printf('%s' . PHP_EOL, $this->text);
+  }
+}
+
+$posts = [];
+// intを送信
+$posts[0] = new Post(5);
+$posts[1] = new Post('hello again');
+
+$posts[0]->show();
+$posts[1]->show();
+?>
