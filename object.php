@@ -152,6 +152,7 @@ $posts[1] = new Post('hello again');
 $posts[0]->like();
 $posts[0]->show();
 $posts[1]->show();
+?>
 
 
 ・プロパティで型宣言
@@ -183,4 +184,132 @@ $posts[1] = new Post('hello again');
 
 $posts[0]->show();
 $posts[1]->show();
+?>
+
+
+・staticキーワード
+
+クラスが持つプロパティ、メソッド
+インスタンス化の影響を受けず、変更を加えたい場合は、::を用いてアクセスしていく
+
+<?php
+class Post
+{
+  private $text;
+  // クラスプロパティ
+  private static $count = 0;
+  
+  public function __construct($text)
+  {
+    $this->text = $text;
+    self::$count++;
+  }
+
+  public function show()
+  {
+    printf('%s' . PHP_EOL, $this->text);
+  }
+
+  // クラスメソッド
+  // クラスプロパティの実行には、クラスメソッドを定義
+  public static function showInfo()
+  {
+    printf('Count: %d' . PHP_EOL, self::$count);
+  }
+}
+
+$posts = [];
+$posts[0] = new Post('hello');
+$posts[1] = new Post('hello again');
+
+$posts[0]->show();
+$posts[1]->show();
+
+// クラスメソッドの実行
+Post::showInfo();　// count: 2
+?>
+
+
+・オブジェクト定数
+
+constで定義
+
+<?php
+class Post
+{
+  private $text;
+  private static $count = 0;
+  // 定数の場合は、publicでも良し
+  public const VERSION = 0.1;
+
+  public function __construct($text)
+  {
+    $this->text = $text;
+    self::$count++;
+  }
+
+  public function show()
+  {
+    printf('%s' . PHP_EOL, $this->text);
+  }
+  
+  public static function showInfo()
+  {
+    printf('Count: %d' . PHP_EOL, self::$count);
+    // 定数の処理
+    printf('Version: %.1f' . PHP_EOL, self::VERSION);
+  }
+}
+
+$posts = [];
+$posts[0] = new Post('hello');
+$posts[1] = new Post('hello again');
+
+$posts[0]->show();
+$posts[1]->show();
+
+Post::showInfo();
+
+// 直接呼び出せる
+echo Post::VERSION . PHP_EOL;
+?>
+
+
+・クラスの継承
+
+class XX extends XX;
+
+<?php
+
+// 親クラス　superクラス
+class Post
+{
+  private $text;
+
+  public function __construct($text)
+  {
+    $this->text = $text;
+  }
+
+  public function show()
+  {
+    printf('%s' . PHP_EOL, $this->text);
+  }
+}
+
+// Postクラスの継承
+class SponsoredPost extends Post　// 子クラス subクラス
+{
+  
+}
+$posts = [];
+$posts[0] = new Post('hello');
+$posts[1] = new Post('hello again');
+// インスタンス作成
+$posts[2] = new SponsoredPost('hello hello');
+
+$posts[0]->show();
+$posts[1]->show();
+// 実行
+$posts[2]->show();
 ?>
