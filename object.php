@@ -35,6 +35,7 @@ class Post
 $posts = [];
 
 $posts[0] = new Post(); //インスタンス
+// プロパティに代入は、アロー関数
 $posts[0]->text = 'hello';
 $posts[0]->likes = 0;
 
@@ -54,7 +55,7 @@ class Post
 {
   public $text;
   public $likes;
-  // コンストラクタ
+  // 73行目の書き方したら、コンストラクタの関数定義する
   public function __construct($text, $likes)
   {
     $this->text = $text;
@@ -134,6 +135,7 @@ class Post
   {
     printf('%s (%d)' . PHP_EOL, $this->text, $this->likes);
   }
+
   // privateのプロパティをメソッドで操作
   public function like()
   {
@@ -149,7 +151,7 @@ $posts = [];
 $posts[0] = new Post('hello');
 $posts[1] = new Post('hello again');
 
-$posts[0]->like();
+$posts[0]->like(); // (1)
 $posts[0]->show();
 $posts[1]->show();
 ?>
@@ -165,7 +167,7 @@ class Post
 {
   // 変数の前に、型宣言
   private string $text;
-
+                           // 変数の前に、型宣言
   public function __construct(string $text)
   {
     $this->text = $text;
@@ -202,6 +204,7 @@ class Post
   public function __construct($text)
   {
     $this->text = $text;
+    // staticプロパティは、self:: でアクセス
     self::$count++;
   }
 
@@ -240,6 +243,7 @@ class Post
   private $text;
   private static $count = 0;
   // 定数の場合は、publicでも良し
+  // constの変数は大文字
   public const VERSION = 0.1;
 
   public function __construct($text)
@@ -256,7 +260,7 @@ class Post
   public static function showInfo()
   {
     printf('Count: %d' . PHP_EOL, self::$count);
-    // 定数の処理
+    // 定数の処理　　　　　　　　　　　　　定数も self:: で
     printf('Version: %.1f' . PHP_EOL, self::VERSION);
   }
 }
@@ -313,3 +317,313 @@ $posts[1]->show();
 // 実行
 $posts[2]->show();
 ?>
+
+
+・子クラスの実装
+
+<?php
+
+class Post
+{
+  private $text;
+
+  public function __construct($text)
+  {
+    $this->text = $text;
+  }
+
+  public function show()
+  {
+    printf('%s' . PHP_EOL, $this->text);
+  }
+}
+
+class SponsoredPost extends Post
+{
+  private $sponsor;
+  
+  public function __construct($text, $sponsor)
+  {
+    // 親コンストラクタの継承
+    parent::__construct($text);
+    $this->sponsor = $sponsor;
+  }
+  
+  public function showSponsor()
+  {
+    printf('%s' . PHP_EOL, $this->sponsor);
+  }
+}
+
+$posts = [];
+$posts[0] = new Post('hello');
+$posts[1] = new Post('hello again');
+$posts[2] = new SponsoredPost('hello hello', 'dotinstall');
+
+$posts[0]->show();
+$posts[1]->show();
+$posts[2]->show();
+$posts[2]->showSponsor();
+?>
+
+
+・メソッドをoverride
+
+同名のメッソドを子クラスで上書きすること
+
+<?php
+
+class Post
+{
+  // protected　に変更すると、子クラスでもプロパティが使える
+  protected $text;
+
+  public function __construct($text)
+  {
+    $this->text = $text;
+  }
+  // final　をつけるとオーバーライドできなくなる
+  final public function show()
+  {
+    printf('%s' . PHP_EOL, $this->text);
+  }
+}
+
+class SponsoredPost extends Post
+{
+  private $sponsor;
+  
+  public function __construct($text, $sponsor)
+  {
+    parent::__construct($text);
+    $this->sponsor = $sponsor;
+  }
+  
+  // オーバーライド
+  public function show()
+  {
+    printf('%s by %s' . PHP_EOL, $this->text, $this->sponsor);
+  }
+}
+
+$posts = [];
+$posts[0] = new Post('hello');
+$posts[1] = new Post('hello again');
+$posts[2] = new SponsoredPost('hello hello', 'dotinstall');
+
+$posts[0]->show();
+$posts[1]->show();
+$posts[2]->show();
+?>
+
+
+・型の継承
+
+<?php
+class Post
+{
+  protected $text;
+
+  public function __construct($text)
+  {
+    $this->text = $text;
+  }
+  
+  public function show()
+  {
+    printf('%s' . PHP_EOL, $this->text);
+  }
+}
+
+// Post型として扱える（Postクラスを継承しているため）
+class SponsoredPost extends Post
+{
+  private $sponsor;
+  
+  public function __construct($text, $sponsor)
+  {
+    parent::__construct($text);
+    $this->sponsor = $sponsor;
+  }
+  
+  public function show()
+  {
+    printf('%s by %s' . PHP_EOL, $this->text, $this->sponsor);
+  }
+}
+
+$posts = [];
+$posts[0] = new Post('hello');
+$posts[1] = new Post('hello again');
+$posts[2] = new SponsoredPost('hello hello', 'dotinstall');
+
+// クラスを型付けして、選択できる
+function processPost(Post $post)
+{
+  $post->show();
+}
+
+// Post, processPostの　show()　を実行する
+foreach ($posts as $post) {
+  processPost($post);
+}
+?>
+
+
+・抽象クラス
+
+子クラスで定義の強制をする
+子クラスでオーバーライドメソッドを削除　→　エラーは出ない
+上記をエラーが出るように変更
+
+<?php
+
+abstract class BasePost
+{
+  // Postクラスから移植
+  protected $text;
+
+  public function __construct($text)
+  {
+    $this->text = $text;
+  }
+  // ここまで
+
+  // abstract以降が各クラスで定義されないとエラー
+  abstract public function show();
+}
+
+// BasePostにネスト
+class Post extends BasePost
+{
+  public function show()
+  {
+    printf('%s' . PHP_EOL, $this->text);
+  }
+}
+
+// BasePostにネスト
+class SponsoredPost extends BasePost
+{
+  private $sponsor;
+
+  public function __construct($text, $sponsor)
+  {
+    parent::__construct($text);
+    $this->sponsor = $sponsor;
+  }
+
+  // abstract追加でえらーがでるようになる
+  // public function show()
+  // {
+  //     printf('%s by %s' . PHP_EOL, $this->text, $this->sponsor);
+  // }
+}
+
+$posts = [];
+$posts[0] = new Post('hello');
+$posts[1] = new Post('hello again');
+$posts[2] = new SponsoredPost('hello hello', 'dotinstall');
+
+// 型付けをBasePostに変更
+function processPost(BasePost $post)
+{
+  $post->show();
+}
+
+foreach ($posts as $post) {
+  processPost($post);
+}
+?>
+
+
+・クラスの追加
+
+
+<?php
+
+abstract class BasePost
+{
+  protected $text;
+
+  public function __construct($text)
+  {
+    $this->text = $text;
+  }
+
+  abstract public function show();
+}
+
+class Post extends BasePost
+{
+  public function show()
+  {
+    printf('%s' . PHP_EOL, $this->text);
+  }
+}
+
+class SponsoredPost extends BasePost
+{
+  private $sponsor;
+
+  public function __construct($text, $sponsor)
+  {
+    parent::__construct($text);
+    $this->sponsor = $sponsor;
+  }
+
+  public function show()
+  {
+    printf('%s by %s' . PHP_EOL, $this->text, $this->sponsor);
+  }
+}
+
+// クラスの追加
+class PremiumPost extends BasePost
+{
+  private $price;
+
+  public function __construct($text, $price)
+  {
+    parent::__construct($text);
+    $this->price = $price;
+  }
+
+  public function show()
+  {
+    printf('%s [%d JPY]' . PHP_EOL, $this->text, $this->price);
+  }
+}
+
+$posts = [];
+$posts[0] = new Post('hello');
+$posts[1] = new Post('hello again');
+$posts[2] = new SponsoredPost('hello hello', 'dotinstall');
+// インスタンス忘れずに
+$posts[3] = new PremiumPost('pay!', 300);
+
+function processPost(BasePost $post)
+{
+  $post->show();
+}
+
+foreach ($posts as $post) {
+  processPost($post);
+}
+?>
+
+
+・インターフェース
+
+BasePost　→　show()　小クラス全部に強制
+Post          →　show()
+sponsoredPost →　show()
+PremiumPost   →　show()
+
+
+Post, SponsoredPostのみ、like()　適用したい
+インターフェースを適用する
+
+
+
+
