@@ -625,5 +625,104 @@ Post, SponsoredPostのみ、like()　適用したい
 インターフェースを適用する
 
 
+<?php
+// インターフェース設定
+interface LikeInterface
+{
+  // like()　の強制
+  public function like();
+}
+
+
+abstract class BasePost
+{
+  protected $text;
+
+  public function __construct($text)
+  {
+    $this->text = $text;
+  }
+
+  abstract public function show();
+}
+
+// implements　で指定
+class Post extends BasePost implements LikeInterface
+{
+  // 追加
+  private $likes = 0;
+  
+  public function like()
+  {
+    $this->likes++;
+  }
+  // ここまで
+
+  public function show()
+  {
+    printf('%s (%d)' . PHP_EOL, $this->text, $this->likes);
+  }
+}
+
+class SponsoredPost extends BasePost
+{
+  private $sponsor;
+
+  public function __construct($text, $sponsor)
+  {
+    parent::__construct($text);
+    $this->sponsor = $sponsor;
+  }
+
+  public function show()
+  {
+    printf('%s by %s' . PHP_EOL, $this->text, $this->sponsor);
+  }
+}
+
+// implements　で指定
+class PremiumPost extends BasePost implements LikeInterface
+{
+  private $price;
+  
+  // 追加
+  private $likes = 0;
+  
+  public function like()
+  {
+    $this->likes++;
+  }
+  // ここまで
+
+  public function __construct($text, $price)
+  {
+    parent::__construct($text);
+    $this->price = $price;
+  }
+
+  public function show()
+  {
+    printf('%s [%d JPY]' . PHP_EOL, $this->text, $this->price);
+  }
+}
+
+$posts = [];
+$posts[0] = new Post('hello');
+$posts[1] = new Post('hello again');
+$posts[2] = new SponsoredPost('hello hello', 'dotinstall');
+$posts[3] = new PremiumPost('hello there', 300);
+
+$posts[0]->like();
+$posts[3]->like();
+
+function processPost(BasePost $post) 
+{
+  $post->show();
+}
+
+foreach ($posts as $post) {
+  processPost($post);
+}
+?>
 
 
