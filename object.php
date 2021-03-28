@@ -863,9 +863,75 @@ include_once('Post.php');
 <?php
 // $classに、Post が格納
 spl_autoload_register(function ($class) {
-  require('Post.php');
+  require($class . '.php');
 });
 
 $posts[0] = new Post('hello');
 ?>
 
+
+・名前空間
+クラス名のダブリ回避
+
+Post.php
+<?php
+// namespaceの定義
+namespace Dotinstall\MyPHPApp;
+
+?>
+
+main.php
+<?php
+// クラス指定に MyPHPApp を使用
+use Dotinstall\MyPHPApp;
+
+require('Post.php');
+
+// クラス名が MyPHPApp\Post になる
+$posts[0] = new MyPHPApp\Post('hello');
+$posts[1] = new MyPHPApp\Post('hello again');
+?>
+
+
+・例外処理
+
+Post.php
+<?php
+class Post
+{
+  private $text;
+
+  function __construct($text)
+  {
+    if (strlen($text) <= 3) {
+      // 例外を投げる
+      throw new Exception('short!');
+    }
+    $this->text = $text;
+  }
+
+  function show()
+  {
+    printf('%s' . PHP_EOL, $this->text);
+  }
+}
+?>
+
+main.php
+<?php
+require('Post.php');
+
+// tryで処理を囲む
+try {
+  $posts[0] = new Post('!');
+  $posts[1] = new Post('hello again');
+  
+  foreach ($posts as $post) {
+    $post->show();
+  }
+  // throw を carch する
+} catch (Exception $e) {
+  // getMessage()メソッドで、メッセージ表示
+  echo $e->getMessage() . PHP_EOL;
+}
+?>
