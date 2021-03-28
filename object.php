@@ -843,3 +843,29 @@ use LikeTrait;
 
 ?>
 
+
+・外部ファイルの読み込み
+main.phpと、Post.phpに分ける
+Post.phpにクラスを移動する
+
+
+require('Post.php');// ファイルが読み込めないと処理が止まる
+include('Post.php');// ファイルが読み込めないと処理が止まらない
+
+<!-- 一度だけ読み込む指示 -->
+require_once('Post.php');
+include_once('Post.php');
+
+
+・クラスを自動的に読み込む
+インスタンスが new されたら発火
+
+<?php
+// $classに、Post が格納
+spl_autoload_register(function ($class) {
+  require('Post.php');
+});
+
+$posts[0] = new Post('hello');
+?>
+
