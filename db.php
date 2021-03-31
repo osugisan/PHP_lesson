@@ -223,3 +223,63 @@ executeは、string型になる
   // executeの中には、書かない
   $stmt->execute();
 ?>
+
+bindParam()で重複を避ける
+<?php
+  $message = 'Merci';
+  $likes = 8;
+  $stmt = $pdo->prepare(
+    "INSERT INTO 
+      posts (message, likes) 
+    VALUES 
+      (:message, :likes)"
+  );
+
+  // こうすると上書きになるので注意
+  $message = 'hello';
+
+  $stmt->bindParam('message', $message, PDO::PARAM_STR);
+  $stmt->bindParam('likes', $likes, PDO::PARAM_INT);
+  $stmt->execute();
+  
+  $message = 'hello';
+  $likes = 5;
+  $stmt->execute();
+  
+  $message = 'danke';
+  $likes = 3;
+  $stmt->execute();
+?>
+
+
+・IDの確認
+
+$stmt->execute();
+echo 'ID: ' . $pdo->lastInsertId() . ' inserted' . PHP_EOL;
+
+
+・クラスで実行
+
+<?php
+class Post
+{
+  // public $id;
+  // public $message;
+  // public $likes;
+  
+  public function show()
+  {
+    echo "$this->message ($this->likes)" . PHP_EOL;
+  }
+}
+
+  $stmt = $pdo->query("SELECT * FROM posts");
+  // fetchAll(PDO::FETCH_CLASS, 'Post'); で定義
+  $posts = $stmt->fetchAll(PDO::FETCH_CLASS, 'Post');
+  foreach ($posts as $post) {
+    $post->show();
+  }
+}
+?>
+
+
